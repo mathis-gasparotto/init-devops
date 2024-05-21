@@ -1,13 +1,13 @@
-name: Deploy to Vercel
+name: Deploy preview to Vercel on PR opened
 on:
   pull_request:
-    types: [closed]
+    types: [opened, synchronize]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     if: |
-      github.event.pull_request.merged == true &&
+      github.event.pull_request.merged == false &&
       github.event.pull_request.base.ref == 'main' &&
       !contains(github.event.head_commit.message, '[skip ci]')
     permissions:
@@ -20,7 +20,7 @@ jobs:
         run: |
           npm i -g vercel
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
-          echo "PROD_URL=$(vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+          echo "PREVIEW_URL=$(vercel --cwd ./ --token ${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
 
       - name: Add PR comment
         uses: actions/github-script@v6
@@ -30,6 +30,6 @@ jobs:
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "${{ steps.deploy.outputs.PROD_URL }}"
+              body: "Preview build url: ${{ steps.deploy.outputs.PREVIEW_URL }}"
             })
             

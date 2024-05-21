@@ -17,16 +17,17 @@ jobs:
         run: |
           npm i -g vercel
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
-          echo "::set-output name=PROD_URL::$(vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }})"
+          echo "PROD_URL=$(vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_ENV
 
       - name: Add PR comment
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: ${{ steps.etape1.outputs.PROD_URL }}
+              body: $PROD_URL
             })
             

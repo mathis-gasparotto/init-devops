@@ -1,13 +1,12 @@
 name: Deploy to Vercel
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [closed]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: "!contains(github.event.head_commit.message, '[skip ci]') && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'"
     permissions:
       pull-requests: write
     steps:

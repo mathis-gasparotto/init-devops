@@ -17,6 +17,8 @@ jobs:
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
           vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }}
       - name: Add PR comment
+        permissions:
+          pull-requests: write
         uses: mshick/add-pr-comment@v2
         with:
           message: |

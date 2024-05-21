@@ -19,7 +19,13 @@ jobs:
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
           vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }} > ./pr-comment.md
       - name: Add PR comment
-        uses: mshick/add-pr-comment@v2
+        uses: actions/github-script@v6
         with:
-          message-path: ./pr-comment.md
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: ./pr-comment.md
+            })
             

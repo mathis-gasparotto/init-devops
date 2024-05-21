@@ -16,4 +16,8 @@ jobs:
           npm i -g vercel
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
           vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }}
-          echo "test"
+      - name: Add PR comment
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            **Hello MAIN**

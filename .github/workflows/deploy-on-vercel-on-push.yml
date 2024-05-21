@@ -16,5 +16,4 @@ jobs:
           npm i -g vercel
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
           vercel --cwd ./ --prod --token ${{ secrets.VERCEL_TOKEN }}
-          echo "test" > comment.md
-          cml-send-comment comment.md
+          echo "test"

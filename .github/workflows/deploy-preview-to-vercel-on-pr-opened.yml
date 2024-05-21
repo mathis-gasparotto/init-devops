@@ -4,7 +4,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  deploy:
+  deploy-preview:
     runs-on: ubuntu-latest
     if: |
       github.event.pull_request.merged == false &&

@@ -20,7 +20,7 @@ jobs:
         run: |
           npm i -g vercel
           vercel link --yes --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
-          echo "PREVIEW_URL=$(vercel --cwd ./ --token ${{ secrets.VERCEL_TOKEN }})" >> $GITHUB_OUTPUT
+          vercel --cwd ./ --token ${{ secrets.VERCEL_TOKEN }} | echo "PREVIEW_URL=$1" >> $GITHUB_OUTPUT
 
       - name: Add PR comment
         uses: actions/github-script@v6

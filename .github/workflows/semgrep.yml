@@ -7,10 +7,36 @@ jobs:
   semgrep:
     name: semgrep-analysis
     runs-on: ubuntu-20.04
+    if: |
+      github.event.pull_request.merged == false &&
+      !contains(github.event.head_commit.message, '[skip ci]')
+    permissions:
+      pull-requests: write
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
       image: semgrep/semgrep
     steps:
     - uses: actions/checkout@v3
-    - run: semgrep ci
+
+    - name: Run Semgrep
+      run: semgrep ci --output scan_results.json --json
+    
+    - name: Send PR message if failure
+      if: failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const scanResults = fs.readFileSync('scan_results.json', 'utf8');
+          const scanResultsJson = JSON.parse(scanResults);
+          const message = 'Error: ' + scanResultsJson.results[0].extra.message + ' in \`' + scanResultsJson.results[0].path + '\` at line ' + scanResultsJson.results[0].start.line + ' column ' + scanResultsJson.results[0].start.col + ' with a severity of \`' + scanResultsJson.results[0].extra.severity + '\`';
+
+          await github.rest.issues.createComment({
+            issue_number: context.payload.pull_request.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: message
+          })
+
+    

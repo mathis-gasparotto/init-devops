@@ -23,13 +23,10 @@ jobs:
 
     - name: Analyze Semgrep results
         run: |
-          # Load the JSON results
           results=$(cat semgrep_results.json)
 
-          # Count the number of findings
           count=$(echo $results | jq '.results | length')
 
-          # Fail if any findings are present
           if [ "$count" -gt 0 ]; then
             echo "There are $count Semgrep findings. Failing the build."
             exit 1

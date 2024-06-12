@@ -3,4 +3,4 @@ const seach = queryParams.get('search')
 
 const el = document.getElementById('text')
 const searchTag = seach || 'No search query'
-el.innerText = searchTag
+el.innerHTML = searchTag

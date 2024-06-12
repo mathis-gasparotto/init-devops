@@ -18,19 +18,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Run Semgrep
-      run: semgrep ci
-      # run: semgrep ci --json > semgrep_results.json
-
-    # - name: Analyze Semgrep results
-    #     run: |
-    #       results=$(cat semgrep_results.json)
-
-    #       count=$(echo $results | jq '.results | length')
-
-    #       if [ "$count" -gt 0 ]; then
-    #         echo "There are $count Semgrep findings. Failing the build."
-    #         exit 1
-    #       else
-    #         echo "No Semgrep findings. Success."
-    #       fi
+    - run: semgrep ci

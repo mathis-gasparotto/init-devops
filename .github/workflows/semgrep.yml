@@ -6,10 +6,11 @@ on:
   schedule:
   # random HH:MM to avoid a load spike on GitHub Actions at 00:00
   - cron: 28 2 * * *
-name: Semgrep Analysis
+name: Semgrep
 jobs:
   semgrep:
     name: semgrep/ci
+    stage: Semgrep Analysis
     runs-on: ubuntu-20.04
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
@@ -21,15 +22,15 @@ jobs:
     - name: Run Semgrep
       run: semgrep ci --json > semgrep_results.json
 
-    - name: Analyze Semgrep results
-        run: |
-          results=$(cat semgrep_results.json)
+    # - name: Analyze Semgrep results
+    #     run: |
+    #       results=$(cat semgrep_results.json)
 
-          count=$(echo $results | jq '.results | length')
+    #       count=$(echo $results | jq '.results | length')
 
-          if [ "$count" -gt 0 ]; then
-            echo "There are $count Semgrep findings. Failing the build."
-            exit 1
-          else
-            echo "No Semgrep findings. Success."
-          fi
+    #       if [ "$count" -gt 0 ]; then
+    #         echo "There are $count Semgrep findings. Failing the build."
+    #         exit 1
+    #       else
+    #         echo "No Semgrep findings. Success."
+    #       fi

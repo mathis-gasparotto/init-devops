@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Run Semgrep
-      id: Semgrep Analysis
+      id: semgrep-analysis
       run: semgrep ci --json > semgrep_results.json
 
     # - name: Analyze Semgrep results

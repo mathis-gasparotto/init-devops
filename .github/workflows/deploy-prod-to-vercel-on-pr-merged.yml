@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event.pull_request.merged == true &&
-      github.event.pull_request.base.ref == 'main' &&
-      !contains(github.event.head_commit.message, '[skip ci]')
+      github.event.pull_request.base.ref == 'main'
     permissions:
       pull-requests: write
     steps:

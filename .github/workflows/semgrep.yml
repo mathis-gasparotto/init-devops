@@ -1,8 +1,6 @@
 on:
-  push:
-    branches:
-    - main
-    - master
+  pull_request:
+    types: [opened, synchronize]
     paths:
     - .github/workflows/semgrep.yml
   schedule:
